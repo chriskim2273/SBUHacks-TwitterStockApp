@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Trending Stocks</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/styles/mainpage.css') }}">
+</head>
+
+<body>
+  <main class="container">
+    <h1 id="title" class="text-center">Stock Searcher!</h1>
+    <div class="row">
+      <div class="col-6">
+        <h3 class="text-success">Recommended Stocks:
+          {% for ticker in tickerData[2] %}
+          <span>${{ticker}} </span>
+          {% endfor %}
+        </h3>
+        <h3 class="text-secondary">Neutral Stocks:
+          {% for ticker in tickerData[1] %}
+          <span>${{ticker}} </span>
+          {% endfor %}
+        </h3>
+        <h3 class="text-danger">Discouraged Stocks:
+          {% for ticker in tickerData[0] %}
+          <span>${{ticker}} </span>
+          {% endfor %}
+        </h3>
+        <a class="twitter-timeline" data-width="500" data-height="600" data-theme="dark"
+          href="https://twitter.com/StocksToTrade?ref_src=twsrc%5Etfw">Tweets by StocksToTrade</a>
+        <!-- <div class="card mt-1">
+          <div class="card-body">
+            <form action="/subscribe" method = "POST" class="needs-validation" novalidate>
+              <h4 class="card-title">Subscribe</h4>
+              <div class="card-text mb-1">
+                <label for="phone" class="form-label">Enter Phone Number (Subscribe)</label>
+                <input type="text" class="form-control" id="phone" name = "phoneNum" required>
+                <div class="invalid-feedback">
+                  Please enter your phone number!
+                </div>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+              </div>
+              <div class="card-text mb-1">
+                <label for="ticker" class="form-label">Enter Ticker</label>
+                <input type="text" class="form-control" id="ticker" name="ticker" required>
+                <div class="invalid-feedback">
+                  Please enter a tinker to follow!
+                </div>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Subscribe</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card mt-1">
+          <div class="card-body">
+            <form action="/update" method = "POST" class="needs-validation" novalidate>
+              <h4 class="card-title">Update</h4>
+              <div class="card-text mb-1">
+                <label for="phone" class="form-label">Enter Phone Number (Subscribe)</label>
+                <input type="text" class="form-control" id="phone" name = "phoneNum" required>
+                <div class="invalid-feedback">
+                  Please enter your phone number!
+                </div>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+              </div>
+              <div class="card-text mb-1">
+                <label for="ticker" class="form-label">Change Ticker</label>
+                <input type="text" class="form-control" id="ticker" name="ticker" required>
+                <div class="invalid-feedback">
+                  Please enter a new tinker to follow!
+                </div>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Update</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <form action="/unsubscribe" method = "POST" class="needs-validation" novalidate>
+              <h4 class="card-title">Unsubscribe</h4>
+              <div class="card-text mb-1">
+                <label for="unsubscribe">Enter Phone Number (Unsubscribe)</label>
+                <input type="text" class="form-control" id="unsubscribe" name = "phoneNum" required>
+                <div class="invalid-feedback">
+                  Please enter your phone number!
+                </div>
+              </div>
+              <button type="submit" class="btn btn-danger">Unsubscribe</button>
+            </form>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="col-6">
+        <form action="/search" method="POST" class="needs-validation mb-3" novalidate>
+          <div class="mb-1">
+            <input type="text" class="form-control" id="search" name="searchedTick" required
+              placeholder="Search For Stock Tickers">
+            <div class="invalid-feedback">
+              Enter Something to Search!
+            </div>
+          </div>
+          <button class="btn btn-primary">Search</button>
+        </form>
+
+        <form action="/enter" method="POST" class="needs-validation" novalidate>
+          <div class="mb-1">
+            <input type="text" class="form-control" id="enter" name="enteredTick" required
+              placeholder="If You're Not Sure About the Ticker Name, Can Search First Above!">
+            <div class="invalid-feedback">
+              Enter Something to Apply the Algorithm!
+            </div>
+          </div>
+          <button class="btn btn-primary">Enter</button>
+        </form>
+
+        {% if appTicker != None %}
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{appTicker['name']}}</h5>
+            <span class="card-text">SO SHOULD YOU INVEST??? {{appTicker['decision']}}</span>
+            <span class="card-text">BASED FROM {{appTicket['numTweets']}} tweets</span>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script>
+    (() => {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
+</body>
+
+</html>

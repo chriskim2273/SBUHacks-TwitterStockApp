@@ -1,0 +1,39 @@
+@keyframes backgroundChange {
+    from {
+        background-position: 0 0;
+    } to {
+        background-position: -50rem 0;
+    }
+}
+
+body {
+    font-family: monospace;
+    font-size: large;
+    font-weight: bold;
+    font-style: italic;
+    height: 100vh;
+    background-image: url("bluegrid.jpeg");
+    background-size: 156.2%;
+    background-position: center;
+    animation: backgroundChange 3s linear infinite;
+}
+
+@keyframes rainbow {
+    0% {color: red;}
+    25% {color: yellow;}
+    50% {color: blue;}
+    75% {color: green;}
+    100% {color: red;}
+}
+
+#title{
+    animation: rainbow 10s infinite;
+}
+
+h3 {
+    transition: 0.5s;
+}
+
+h3:hover {
+    font-size: 40px;
+}

@@ -1,0 +1,9 @@
+from pathlib import Path
+
+script_dir = Path(__file__).absolute().parent
+
+f = open(script_dir / "tickers.txt", "r")
+joe = f.read()
+joe = joe.split("\n")
+
+print(str(joe))
