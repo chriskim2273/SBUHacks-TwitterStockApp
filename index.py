@@ -1,4 +1,5 @@
 from flask import Flask, request, url_for, redirect, render_template
+import yfinance
 
 # import PhoneNumDataBase as PB
 import TickerDataBase as TB
@@ -44,13 +45,20 @@ def search_tinker():
 
 @app.post("/enter")
 def apply_on_ticker():
-    suggestor = ticker_suggestor([str(request.form.get("enteredTick"))], 50)
-    result = suggestor.getSuggestion()
+    ticker = str(request.form.get("enteredTick")).upper()
+    yf_ticker = yfinance.Ticker(ticker)
+    print(yf_ticker.info)
     appTicker = {
         "decision": None,
         "name": None,
-        "numTweets": result["NUMBER_OF_TWEETS"],
+        "numTweets": None,
     }
+    if yf_ticker.info["regularMarketPrice"] == None:
+        print("NOT VALID")
+        tickerData = getTickerData()
+        return render_template("index.html", tickerData=tickerData, appTicker=appTicker)
+    suggestor = ticker_suggestor([ticker], 50)
+    result = suggestor.getSuggestion()
     if result["NEUTRAL"] == []:
         if result["NO"] == []:
             appTicker["decision"] = "YES"
